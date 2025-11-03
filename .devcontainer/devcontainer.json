@@ -1,0 +1,33 @@
+{
+  "name": "org.openrichmedia.devcontainers/quali-dev-order-flow-dev:0824",
+  "service": "dev",
+  "dockerComposeFile": "docker-compose.yml",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "vscjava.vscode-gradle",
+        "vscjava.vscode-java-debug",
+        "jebbs.plantuml",
+        "redhat.java",
+        "VisualStudioExptTeam.vscodeintellicode",
+        "vscjava.vscode-java-dependency",
+        "vscjava.vscode-java-test",
+        "ms-vscode.live-server",
+        "redhat.vscode-quarkus",
+        "contextmapper.context-mapper-vscode-extension",
+        "redhat.vscode-yaml",
+        "Angular.ng-template"
+      ]
+    }
+  },
+  "containerEnv": {
+    "WORKSPACE_ROOT": "${localWorkspaceFolder}"
+  },
+  "forwardPorts": [
+    "postgresql:5432"
+  ],
+  "remoteUser": "root"
+}

@@ -1,0 +1,16 @@
+/* You can add global styles to this file, and also import other style files */
+@use "tailwindcss";
+
+@theme {
+    --color-primary-50: #f0f7ff;
+    --color-primary-100: #e0eefe;
+    --color-primary-200: #bbdefc;
+    --color-primary-300: #7fc2fa;
+    --color-primary-400: #3ba4f5;
+    --color-primary-500: #107cd1;
+    --color-primary-600: #056ac4;
+    --color-primary-700: #06549e;
+    --color-primary-800: #094883;
+    --color-primary-900: #0e3e6c;
+    --color-primary-950: #092748;
+}

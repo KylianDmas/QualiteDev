@@ -1,0 +1,21 @@
+plugins {
+    id 'java-platform'
+}
+
+javaPlatform {
+    allowDependencies()
+}
+
+dependencies {
+    api platform("io.quarkus.platform:quarkus-bom:${quarkusPlatformVersion}")
+
+    constraints {
+        api "org.hibernate.validator:hibernate-validator:${hibernateValidatorVersion}"
+        api "org.projectlombok:lombok:${lombokVersion}"
+        api "org.junit.jupiter:junit-jupiter:${junitJupiterVersion}"
+        api "org.mockito:mockito-core:${mockitoVersion}"
+        api "org.mapstruct:mapstruct:${mapstructVersion}"
+        api "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+        api "org.glassfish.expressly:expressly:${expresslyVersion}"
+    }
+}

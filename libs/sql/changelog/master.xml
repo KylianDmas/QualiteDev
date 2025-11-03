@@ -1,0 +1,26 @@
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.33.xsd">
+
+  <include file="platform/main-changelog.xml" relativeToChangelogFile="true" />
+  <include file="product-registry/domain-changelog.xml" relativeToChangelogFile="true" />
+  <include file="product-registry/read-changelog.xml" relativeToChangelogFile="true" />
+  <!-- UPDATE platform rights -->
+  <changeSet id="platform-999-update-rights" author="t.faurie" runAlways="true">
+    <sql>
+      GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA eventing TO order_flow;
+      GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA eventing TO order_flow;
+      GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA domain TO order_flow;
+      GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA domain TO order_flow;
+    </sql>
+    <rollback>
+      <sql>
+        REVOKE SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA eventing FROM order_flow;
+        REVOKE USAGE, SELECT ON ALL SEQUENCES IN SCHEMA eventing FROM order_flow;
+        REVOKE SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA domain FROM order_flow;
+        REVOKE USAGE, SELECT ON ALL SEQUENCES IN SCHEMA domain FROM order_flow;
+      </sql>
+    </rollback>
+  </changeSet>
+</databaseChangeLog>

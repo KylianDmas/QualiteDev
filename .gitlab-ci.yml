@@ -1,0 +1,59 @@
+stages:
+  - docker
+  - build
+
+variables:
+  DOCKER_PATH: ./ci/docker/.
+  DOCKER_IMAGE: ${CI_REGISTRY_IMAGE}/quali-dev-order-flow-build:0925
+
+.distributed:
+  interruptible: true
+  cache:
+    key:
+      files:
+        - pnpm-lock.json
+    paths:
+      - .pnpm-store/
+  before_script:
+    - source $HOME/.sdkman/bin/sdkman-init.sh
+    - corepack enable
+    - corepack prepare pnpm@latest --activate
+    - pnpm config set store-dir .pnpm-store
+    - pnpm install --frozen-lockfile
+
+docker-prepare:
+  stage: docker
+  image: quay.io/containers/podman:latest
+  variables:
+    # Safer defaults for rootless in CI containers
+    BUILDAH_FORMAT: docker
+    BUILDAH_ISOLATION: chroot
+    STORAGE_DRIVER: vfs
+  interruptible: true
+  script:
+    # login
+    - podman login --username "$CI_REGISTRY_USER" --password "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    # if image already exists in registry, skip build
+    - |
+      if podman manifest inspect "$DOCKER_IMAGE" >/dev/null 2>&1; then
+        echo "✅ Image exists, skipping build"
+        exit 0
+      fi
+    # build (Dockerfile context in $DOCKER_PATH)
+    - podman build -t "$DOCKER_IMAGE" "$DOCKER_PATH"
+    - podman push "$DOCKER_IMAGE"
+
+pages:
+  extends: .distributed
+  stage: build
+  image: $DOCKER_IMAGE
+  script:
+    - pnpm run --filter doc-material build
+  artifacts:
+    paths:
+      # The folder that contains the files to be exposed at the Page URL
+      - public
+  rules:
+    # This ensures that only pushes to the default branch will trigger
+    # a pages deploy
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH

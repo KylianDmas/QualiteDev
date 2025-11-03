@@ -1,0 +1,20 @@
+{
+  "name": "doc-material",
+  "version": "2.0.0-SNAPSHOT",
+  "description": "",
+  "scripts": {
+    "dev": "vitepress dev --host 0.0.0.0",
+    "build": "vitepress build"
+  },
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "mermaid": "catalog:",
+    "vitepress": "catalog:",
+    "vitepress-plugin-mermaid": "catalog:",
+    "cytoscape": "catalog:",
+    "cytoscape-cose-bilkent": "catalog:",
+    "dayjs": "catalog:",
+    "debug": "catalog:",
+    "@braintree/sanitize-url": "catalog:"
+  }
+}

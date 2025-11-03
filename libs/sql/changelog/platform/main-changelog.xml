@@ -1,0 +1,88 @@
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+     http://www.liquibase.org/xml/ns/dbchangelog
+     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.33.xsd">
+  <changeSet id="platform-000-init" author="t.faurie">
+    <tagDatabase tag="init"/>
+  </changeSet>
+  <changeSet id="platform-001-init-schemas" author="t.faurie">
+    <sql>
+      CREATE SCHEMA IF NOT EXISTS domain;
+      GRANT USAGE ON SCHEMA domain TO order_flow;
+      CREATE SCHEMA IF NOT EXISTS eventing;
+      GRANT USAGE ON SCHEMA eventing TO order_flow;
+      ALTER DEFAULT PRIVILEGES IN SCHEMA eventing GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO order_flow;
+      ALTER DEFAULT PRIVILEGES IN SCHEMA eventing GRANT USAGE, SELECT ON SEQUENCES TO order_flow;
+      ALTER DEFAULT PRIVILEGES IN SCHEMA domain GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO order_flow;
+      ALTER DEFAULT PRIVILEGES IN SCHEMA domain GRANT USAGE, SELECT ON SEQUENCES TO order_flow;
+    </sql>
+    <rollback>
+      <sql>
+        DROP SCHEMA domain;
+        DROP SCHEMA eventing;
+      </sql>
+    </rollback>
+  </changeSet>
+
+  <!-- Event log (immutable, append-only, sans payload) -->
+  <changeSet id="platform-002-eventlog" author="t.faurie">
+    <createTable tableName="event_log" schemaName="eventing">
+      <column name="id" type="bigserial">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="aggregate_type" type="text" remarks="ex: Product">
+        <constraints nullable="false"/>
+      </column>
+      <column name="aggregate_id" type="uuid">
+        <constraints nullable="false"/>
+      </column>
+      <column name="aggregate_version" type="bigint">
+        <constraints nullable="false"/>
+      </column>
+      <column name="event_type" type="text" remarks="ex: ProductRegistered">
+        <constraints nullable="false"/>
+      </column>
+      <column name="event_version" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="payload" type="jsonb">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="occurred_at" type="timestamptz" defaultValueDate="CURRENT_TIMESTAMP"/>
+    </createTable>
+
+    <createIndex tableName="event_log" indexName="ix_eventlog_aggregate" schemaName="eventing">
+      <column name="aggregate_type"/>
+      <column name="aggregate_id"/>
+      <column name="aggregate_version"/>
+    </createIndex>
+    <addUniqueConstraint tableName="event_log" columnNames="aggregate_type, aggregate_id, aggregate_version"
+      schemaName="eventing"
+      constraintName="uq_event_log_aggregate_ver"/>
+  </changeSet>
+
+  <!-- Outbox (transactionnelle, sans payload) -->
+  <changeSet id="platform-003-outbox" author="t.faurie">
+    <createTable tableName="outbox" schemaName="eventing">
+      <column name="id" type="bigserial">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="event_id" type="bigint">
+        <constraints nullable="false"/>
+      </column>
+      <column name="attempts" type="int" defaultValueNumeric="0"/>
+      <column name="next_attempt_at" type="timestamptz"/>
+      <column name="last_error" type="text"/>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableSchemaName="eventing" baseTableName="outbox" baseColumnNames="event_id"
+    referencedTableSchemaName="eventing" referencedTableName="event_log" referencedColumnNames="id"
+    constraintName="fk_outbox_event_log"/>
+    <createIndex tableName="outbox" indexName="ix_outbox_ready" schemaName="eventing">
+      <column name="next_attempt_at"/>
+    </createIndex>
+  </changeSet>
+</databaseChangeLog>

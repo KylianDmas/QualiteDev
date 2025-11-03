@@ -1,0 +1,50 @@
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+     http://www.liquibase.org/xml/ns/dbchangelog
+     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.33.xsd">
+  <changeSet id="prd-read-000-schema" author="t.faurie">
+    <sql>
+      CREATE SCHEMA IF NOT EXISTS read_product_registry;
+      GRANT USAGE ON SCHEMA read_product_registry TO order_flow;
+      ALTER DEFAULT PRIVILEGES IN SCHEMA read_product_registry GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO order_flow;
+      ALTER DEFAULT PRIVILEGES IN SCHEMA read_product_registry GRANT USAGE, SELECT ON SEQUENCES TO order_flow;
+    </sql>
+    <rollback>
+      <sql>DROP SCHEMA read_product_registry;</sql>
+    </rollback>
+  </changeSet>
+
+  <changeSet id="prd-read-001-tables" author="t.faurie">
+    <createTable tableName="product_view" schemaName="read_product_registry">
+      <column name="id" type="uuid">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="_version" type="bigint" defaultValueNumeric="0" remarks="@Version"/>
+      <column name="sku_id" type="varchar(9)"/>
+      <column name="name" type="text"/>
+      <column name="description" type="text"/>
+      <column name="status" type="text"/>
+      <column name="events" type="jsonb"/>
+      <column name="catalogs" type="jsonb"/>
+      <column name="created_at" type="timestamptz" defaultValueDate="CURRENT_TIMESTAMP"/>
+      <column name="updated_at" type="timestamptz" defaultValueDate="CURRENT_TIMESTAMP"/>
+    </createTable>
+    <createIndex tableName="product_view" indexName="ix_prdview_sku" schemaName="read_product_registry">
+      <column name="sku_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet id="prd-read-999-update-rights" author="t.faurie" runAlways="true">
+    <sql>
+      GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA read_product_registry TO order_flow;
+      GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA read_product_registry TO order_flow;
+    </sql>
+    <rollback>
+      <sql>
+        REVOKE SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA read_product_registry FROM order_flow;
+        REVOKE USAGE, SELECT ON ALL SEQUENCES IN SCHEMA read_product_registry FROM order_flow;
+      </sql>
+    </rollback>
+  </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,52 @@
+plugins {
+    id 'java-library'
+    id 'jacoco'
+}
+
+dependencies {
+    implementation enforcedPlatform(project(":libs:bom-platform"))
+    annotationProcessor enforcedPlatform(project(":libs:bom-platform"))
+    implementation project(":libs:cqrs-support")
+    implementation "org.hibernate.validator:hibernate-validator"
+    implementation "org.projectlombok:lombok"
+    implementation "org.glassfish.expressly:expressly"
+
+    // Annotation processors
+    annotationProcessor "org.projectlombok:lombok"
+    annotationProcessor "org.mapstruct:mapstruct-processor"
+
+    // Tests
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+version = '0.1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+test {
+    useJUnitPlatform()
+    systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-parameters'
+}
+
+compileTestJava {
+    options.encoding = 'UTF-8'
+}
+
+jacocoTestReport {
+    reports {
+        html.outputLocation = layout.buildDirectory.dir("jacocoHtml")
+    }
+}

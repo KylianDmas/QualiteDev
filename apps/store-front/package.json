@@ -1,0 +1,51 @@
+{
+  "name": "apps-store-front",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve --host 127.0.0.1",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true,
+    "overrides": [
+      {
+        "files": "*.html",
+        "options": {
+          "parser": "angular"
+        }
+      }
+    ]
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/common": "catalog:",
+    "@angular/compiler": "catalog:",
+    "@angular/core": "catalog:",
+    "@angular/forms": "catalog:",
+    "@angular/platform-browser": "catalog:",
+    "@angular/router": "catalog:",
+    "@tailwindcss/postcss": "catalog:",
+    "postcss": "catalog:",
+    "rxjs": "catalog:",
+    "tailwindcss": "catalog:",
+    "tslib": "catalog:",
+    "uuid": "catalog:"
+  },
+  "devDependencies": {
+    "@angular/build": "catalog:",
+    "@angular/cli": "catalog:",
+    "@angular/compiler-cli": "catalog:",
+    "@types/jasmine": "catalog:",
+    "jasmine-core": "catalog:",
+    "karma": "catalog:",
+    "karma-chrome-launcher": "catalog:",
+    "karma-coverage": "catalog:",
+    "karma-jasmine": "catalog:",
+    "karma-jasmine-html-reporter": "catalog:",
+    "typescript": "catalog:"
+  }
+}

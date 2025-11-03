@@ -1,0 +1,24 @@
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+     http://www.liquibase.org/xml/ns/dbchangelog
+     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.33.xsd">
+  <changeSet id="prd-001-products" author="t.faurie">
+    <createTable tableName="products" schemaName="domain">
+      <column name="id" type="uuid">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="text" />
+      <column name="description" type="text"/>
+      <column name="sku_id" type="varchar(9)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="status" type="text"/>
+      <column name="version" type="bigint" defaultValueNumeric="0" remarks="@Version"/>
+    </createTable>
+    <createIndex tableName="products" indexName="ux_products_sku" schemaName="domain" unique="true">
+      <column name="sku_id"/>
+    </createIndex>
+  </changeSet>
+</databaseChangeLog>

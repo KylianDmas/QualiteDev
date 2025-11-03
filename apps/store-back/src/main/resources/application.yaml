@@ -1,0 +1,18 @@
+# General properties
+quarkus:
+  http:
+    port: ${HTTP_PORT:8080}
+  rest:
+        path: /api
+  log:
+    level: ${LOG_LEVEL:INFO}
+    console:
+      level: ${LOG_LEVEL:DEBUG}
+    category:
+      "org.ormi.priv.tfa.orderflow.store":
+        level: ${LOG_LEVEL:DEBUG}
+  rest-client:
+    product-registry-api:
+      url: ${PRODUCT_REGISTRY_URL:http://localhost:8091/api}
+    product-registry-read-api:
+      url: ${PRODUCT_REGISTRY_READ_URL:http://localhost:8092/api}

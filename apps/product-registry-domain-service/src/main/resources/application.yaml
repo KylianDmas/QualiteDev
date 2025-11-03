@@ -1,0 +1,36 @@
+# General properties
+quarkus:
+    devservices:
+        enabled: false
+    http:
+        port: ${HTTP_PORT:8091}
+    rest:
+        path: /api
+    log:
+        level: ${LOG_LEVEL:INFO}
+        console:
+            level: ${LOG_LEVEL:DEBUG}
+        category:
+            "org.ormi.priv.tfa.orderflow.productregistry":
+                level: ${LOG_LEVEL:DEBUG}
+    jackson:
+        write-dates-as-timestamps: true
+    # DB configuration
+    datasource:
+        db-kind: ${DB_KIND:postgresql}
+        jdbc:
+            url: ${DB_URL:jdbc:postgresql://postgresql:5432/order_flow}
+            driver: ${DB_DRIVER:org.postgresql.Driver}
+        username: ${DB_USERNAME:order_flow}
+        password: ${DB_PASSWORD}
+    hibernate-orm:
+        log:
+            sql: ${LOG_SQL:false}
+        jdbc:
+            timezone: ${DB_TIMEZONE:UTC}
+        dialect: ${DB_DIALECT:PostgreSQL}
+        database:
+            default-schema: ${DB_DEFAULT_SCHEMA:domain}
+        mapping:
+            format:
+                global: ignore

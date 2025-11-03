@@ -1,0 +1,39 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    implementation enforcedPlatform(project(":libs:bom-platform"))
+    annotationProcessor enforcedPlatform(project(":libs:bom-platform"))
+
+    // Jackson
+    compileOnly "com.fasterxml.jackson.core:jackson-annotations"
+    // Lombok
+    implementation "org.projectlombok:lombok"
+    annotationProcessor "org.projectlombok:lombok"
+}
+
+group = 'org.ormi.priv.tfa.orderflow'
+version = '0.1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+test {
+    useJUnitPlatform()
+    systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-parameters'
+}
+
+compileTestJava {
+    options.encoding = 'UTF-8'
+}

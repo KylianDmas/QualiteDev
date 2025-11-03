@@ -1,0 +1,50 @@
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      DB_PASSWORD: ${POSTGRES_ORDERFLOW_PASSWORD}
+    command: sleep infinity
+    userns_mode: "keep-id"
+    volumes:
+      - ..:/workspace
+      - gradle-deps:/root/.gradle/caches/modules-2
+    networks:
+      - dev
+  
+  postgresql:
+    image: postgres:17-trixie
+    env_file:
+      - .env
+    environment:
+      POSTGRES_PASSWORD: postgres-pwd
+      POSTGRES_ORDERFLOW_PASSWORD: ${POSTGRES_ORDERFLOW_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./postgresql/init.sh:/docker-entrypoint-initdb.d/init.sh:ro
+    networks:
+      - dev
+  
+  liquibase:
+    image: liquibase:4.33
+    env_file:
+      - .env
+    environment:
+      LIQUIBASE_COMMAND_URL: jdbc:postgresql://postgresql:5432/order_flow
+      LIQUIBASE_COMMAND_USERNAME: postgres
+      LIQUIBASE_COMMAND_PASSWORD: postgres-pwd
+    command: sleep infinity
+    volumes:
+      - ../libs/sql/changelog:/liquibase/changelog
+    networks:
+      - dev
+
+volumes:
+  gradle-deps:
+  postgres-data:
+
+networks:
+  dev:

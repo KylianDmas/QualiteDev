@@ -1,0 +1,74 @@
+plugins {
+    id 'java'
+    id 'io.quarkus'
+    id 'jacoco'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    implementation enforcedPlatform(project(":libs:bom-platform"))
+    annotationProcessor enforcedPlatform(project(":libs:bom-platform"))
+    implementation 'io.quarkus:quarkus-arc'
+    implementation 'io.quarkus:quarkus-rest-jackson'
+    implementation 'io.quarkus:quarkus-hibernate-validator'
+    implementation 'io.quarkus:quarkus-config-yaml'
+
+    implementation project(':libs:contracts:product-registry-contract')
+
+    // Platform
+    implementation "org.hibernate.validator:hibernate-validator"
+    compileOnly "org.projectlombok:lombok"
+
+    // JPA
+    implementation 'io.quarkus:quarkus-hibernate-orm-panache'
+    implementation 'io.quarkus:quarkus-jdbc-postgresql'
+
+    // Local Libs
+    implementation project(":libs:kernel")
+    implementation project(":libs:cqrs-support")
+
+    // MapStruct
+    implementation "org.mapstruct:mapstruct"
+
+    // SmallRye OpenAPI
+    implementation 'io.quarkus:quarkus-smallrye-openapi'
+
+    // Annotation processors
+    annotationProcessor "org.projectlombok:lombok"
+    annotationProcessor "org.mapstruct:mapstruct-processor"
+
+    testImplementation 'io.quarkus:quarkus-junit5'
+    testImplementation 'io.quarkus:quarkus-junit5-mockito'
+    testImplementation 'io.quarkus:quarkus-jacoco'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.mockito:mockito-core'
+
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+group = 'org.ormi.priv.tfa.orderflow'
+version = '0.1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+test {
+    useJUnitPlatform()
+    systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
+}
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-parameters'
+    dependsOn tasks.named('compileQuarkusGeneratedSourcesJava')
+}
+
+compileTestJava {
+    options.encoding = 'UTF-8'
+}

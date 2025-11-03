@@ -1,0 +1,105 @@
+Domain OnlineShoppingDomain {
+  domainVisionStatement = "The Online Shopping domain is responsible for allowing customers to shop online."
+
+  Subdomain ProductCatalogDomain {
+    domainVisionStatement = "The Product Catalog domain is responsible for managing product catalogs."
+    type = SUPPORTING_DOMAIN
+  }
+
+  Subdomain ProductRegistryDomain {
+    domainVisionStatement = "The Product Registry domain is responsible for managing products listing globally."
+    type = SUPPORTING_DOMAIN
+  }
+
+  Subdomain StockDomain {
+    domainVisionStatement = "The Stock domain is responsible for allowing stock management and item reservation."
+    type = SUPPORTING_DOMAIN
+  }
+
+  Subdomain CustomerDomain {
+    domainVisionStatement = "The Customer domain is responsible for allowing customers to manage their accounts."
+    type = SUPPORTING_DOMAIN
+  }
+
+  Subdomain CustomerNotificationDomain {
+    domainVisionStatement = "The Customer Notification domain is responsible for sending notifications to customers."
+    type = SUPPORTING_DOMAIN
+  }
+
+  Subdomain NotificationDomain {
+    domainVisionStatement = "The Notification domain is responsible for sending notifications."
+    type = GENERIC_SUBDOMAIN
+  }
+
+  Subdomain ShoppingCartDomain {
+    domainVisionStatement = "The Shopping Cart domain is responsible for allowing customers to manage their shopping carts."
+    type = CORE_DOMAIN
+  }
+
+  Subdomain OrderProcessingDomain {
+    domainVisionStatement = "The Order domain is responsible for allowing customers to place and track orders."
+    type = CORE_DOMAIN
+  }
+
+  Subdomain BillingDomain {
+    domainVisionStatement = "The Billing domain is responsible for managing billing and invoicing."
+    type = GENERIC_SUBDOMAIN
+  }
+}
+
+UserStory Cart {
+  As a "Customer"
+    I want to "add" an "item" with its "quantity" to "shopping cart"
+    I want to "remove" an "item" in "shopping cart"
+    I want to "update" the "quantity" for an "item in shopping cart"
+    I want to "view" the "items" in "shopping cart"
+    I want to "ensure" the "reservation" for "items in shopping cart"
+  so that "I can manage my shopping cart"
+}
+
+UserStory Order {
+  As a "Customer"
+    I want to "place" an "order" with its "cart items"
+    I want to "view" the "order" with its "details"
+    I want to "track" the "order" with its "status"
+  so that "I can manage my orders"
+}
+
+UserStory Product_Customer {
+  As a "Customer"
+    I want to "view" the "product" with its "details"
+    I want to "search" the "products" with their "criteria"
+  so that "I can find the products I want to buy"
+}
+
+UserStory Product_Admin {
+  As an "Admin"
+    I want to "add" a "product" with its "details"
+    I want to "update" a "product" with its "details"
+    I want to "delete" a "product"
+  so that "I can manage the products"
+}
+
+UserStory Catalog {
+  As an "Admin"
+    I want to "add" an "item" with its "details" to "catalog"
+    I want to "update" an "item" with its "details" in "catalog"
+    I want to "delete" an "item" in "catalog"
+    I want to "disable" an "item" in "catalog"
+  so that "I can manage the catalog"
+}
+
+UserStory Customer {
+  As a "Customer"
+    I want to "register" an "account" with its "personal information"
+    I want to "update" an "account" with its "personal information"
+    I want to "delete" an "account"
+  so that "I can manage my account"
+}
+
+UserStory Notification {
+  As a "Customer"
+    I want to "receive" a "notification" for "order events"
+    I want to "register" the "contact" for "notifications"
+  so that "I can be informed and choose how to be notified"
+}
