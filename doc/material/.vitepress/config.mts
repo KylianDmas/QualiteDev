@@ -37,8 +37,8 @@ export default withMermaid({
           {
             text: 'Travaux pratiques', items: [
               { text: 'Page principale', link: '/fr/tp/' },
-              { text: 'Présentation du projet', link: '/fr/presentation-projet' },
-              { text: 'Introduction', link: '/fr/td/introduction' },
+              { text: 'Présentation du projet', link: '/fr/tp/presentation-projet' },
+              { text: 'Introduction', link: '/fr/tp/introduction' },
             ]
           }
         ],
